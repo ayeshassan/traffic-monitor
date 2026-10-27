@@ -40,23 +40,66 @@ During testing, I confirmed this pipeline correctly detects the *behavioral sign
 
 ```
 traffic-monitor/
-├── test_capture.py       # Initial packet capture test
-├── feature_extract.py    # Extracts structured features from live packets
-├── train_model.py        # Trains the Random Forest model on NSL-KDD
-├── live_detect_v2.py     # Real-time detection with rolling-window features
-├── dashboard.py          # Flask web dashboard (main demo)
-├── visualize_traffic.py  # Matplotlib visualizations of captured traffic
-├── traffic_model.pkl     # Saved trained model
+├── test_capture.py          # Initial packet capture test
+├── feature_extract.py       # Extracts structured features from live packets
+├── train_model.py           # Trains the Random Forest model on NSL-KDD
+├── live_detect_v1_basic.py  # First version: basic per-connection counters
+├── live_detect_v2.py        # Real-time detection with rolling-window features
+├── dashboard.py             # Flask web dashboard (main demo)
+├── visualize_traffic.py     # Matplotlib visualizations of captured traffic
+├── Field Names.csv          # NSL-KDD column names
+├── sample_traffic.csv       # Anonymised sample of a real capture
+├── requirements.txt         # Python dependencies
 └── README.md
 ```
 
-## Running it
+The trained model files (`*.pkl`) and the NSL-KDD dataset are not stored in this repo. You generate the model yourself in step 3 below.
+
+## Setup and running it
+
+**1. Install the dependencies**
 
 ```bash
-pip install scapy pyshark pandas scikit-learn flask joblib matplotlib
+pip install -r requirements.txt
+```
+
+Live capture on Windows also needs [Npcap](https://npcap.com/) installed.
+
+**2. Get the dataset**
+
+Download the NSL-KDD dataset from the University of New Brunswick (Canadian Institute for Cybersecurity) and put these two files in the project folder:
+
+- `KDDTrain+.txt`
+- `KDDTest+.txt`
+
+**3. Train the model**
+
+```bash
+python train_model.py
+```
+
+This prints the accuracy report and creates `traffic_model.pkl`, `encoders.pkl` and `feature_cols.pkl`. The model is built locally on purpose: pickle files can run code when loaded, so only load ones you created yourself.
+
+**4. Start the dashboard**
+
+```bash
 python dashboard.py
 ```
-Then open `http://127.0.0.1:5000` in your browser. (Requires admin/root privileges for packet capture.)
+
+Then open `http://127.0.0.1:5000` in your browser. Packet capture needs admin/root privileges.
+
+**Optional: capture your own traffic and chart it**
+
+```bash
+python feature_extract.py     # saves captured_traffic.csv
+python visualize_traffic.py   # saves the two charts
+```
+
+`sample_traffic.csv` is an anonymised sample of a real capture (IP addresses replaced), included so you can see the data format without capturing anything.
+
+## Responsible use
+
+Only capture traffic on networks you own or have explicit permission to monitor.
 
 ## Future improvements
 
