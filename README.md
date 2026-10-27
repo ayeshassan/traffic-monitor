@@ -67,10 +67,7 @@ Live capture on Windows also needs [Npcap](https://npcap.com/) installed.
 
 **2. Get the dataset**
 
-Download the NSL-KDD dataset from the University of New Brunswick (Canadian Institute for Cybersecurity) and put these two files in the project folder:
-
-- `KDDTrain+.txt`
-- `KDDTest+.txt`
+Download the NSL-KDD dataset ([official page](https://www.unb.ca/cic/datasets/nsl.html)). The files are also available from [this GitHub repo](https://github.com/Jehuty4949/NSL_KDD). Save `KDDTrain+.txt` and `KDDTest+.txt` in the project folder.
 
 **3. Train the model**
 
